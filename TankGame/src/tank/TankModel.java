@@ -15,9 +15,11 @@ public class TankModel extends Sprite {
     private double tankMaxY;
     private double tankMaxUpRotation;
     private double tankMinDownRotation;
+    private boolean isSinglePlayer; 
 
     private P1Controls c1;
     private P2Controls c2;
+    TankAI AI;
 
     private double speed;
     private double health;
@@ -28,11 +30,22 @@ public class TankModel extends Sprite {
         this.speed = speed;
         this.c1 = c1;
         this.c2 = c2; 
+        this.isSinglePlayer = false;
+
+        createBounds();
+    }
+    public TankModel(Pane playerlayer, Image image, double x, double y, double  changeX, double changeY, double health, double speed, P1Controls c1, P2Controls c2, String player, double r, double changeR, TankAI ai) {
+        super(playerlayer, image, x, y, changeX, changeY, player, r, changeR);
+        this.health = health;
+        this.speed = speed;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.isSinglePlayer = true;
+        this.AI = ai;
         
 
         createBounds();
     }
-    
     private void createBounds() {
         // calculate movement bounds of the player tank
         // allow half of the tank to be outside of the screen 
@@ -54,11 +67,10 @@ public class TankModel extends Sprite {
             tankMaxUpRotation = 15;
         	tankMinDownRotation = -15;
     	}
-    	
-    
     }
 
     public void processInput() {
+    	
     	if (getPlayer().equals("player1")) {
         // horizontal direction for player 1
     		if (c1.isMoveLeft()) {
@@ -86,29 +98,61 @@ public class TankModel extends Sprite {
         	}
     	} 
     	else if (getPlayer().equals("player2")){
-    	// horizontal direction for player 2
-    		if (c2.isMoveLeft()) {
-    			setChangeX(-speed);
-    		}
-    		else if (c2.isMoveRight()) {
-    			setChangeX(speed);
-    		}
-    		else if (c2.isMoveUp()) {
-        		setChangeY(-(speed / 2));
-        	}
-    		else if (c2.isMoveDown()) {
-        		setChangeY(speed / 2);
-        	}
-    		else if (c2.isRotateUp()) {
-    			setChangeR(2.5);
-    		}
-    		else if (c2.isRotateDown()) {
-    			setChangeR(-2.5);
-    		}
-    		else {
-    			setChangeX(0.0);
-    			setChangeY(0.0);
-    			setChangeR(0.0);
+    		if (isSinglePlayer) {
+    			AI.calculateMove();
+    			if (AI.isMoveLeft()) {
+	    			setChangeX(-speed);
+	    		}
+	    		else if (AI.isMoveRight()) {
+	    			setChangeX(speed);
+	    		}
+	    		else if (AI.isMoveUp()) {
+	    			if (Double.compare(getY(), tankMaxY) > 0.00) {
+	    	        	setY(tankMaxY);
+	    	        	setChangeY(0);
+	    	        } else {
+	    	        	setChangeY(-(speed / 2));
+	    	        }
+	        	}
+	    		else if (AI.isMoveDown()) {
+	        		setChangeY(speed / 2);
+	        	}
+	    		else if (AI.isRotateUp()) {
+	    			setChangeR(2.5);
+	    		}
+	    		else if (AI.isRotateDown()) {
+	    			setChangeR(-2.5);
+	    		}
+	    		else {
+	    			setChangeX(0.0);
+	    			setChangeY(0.0);
+	    			setChangeR(0.0);
+	    		}
+    		} else {
+	    	// horizontal direction for player 2
+	    		if (c2.isMoveLeft()) {
+	    			setChangeX(-speed);
+	    		}
+	    		else if (c2.isMoveRight()) {
+	    			setChangeX(speed);
+	    		}
+	    		else if (c2.isMoveUp()) {
+	        		setChangeY(-(speed / 2));
+	        	}
+	    		else if (c2.isMoveDown()) {
+	        		setChangeY(speed / 2);
+	        	}
+	    		else if (c2.isRotateUp()) {
+	    			setChangeR(2.5);
+	    		}
+	    		else if (c2.isRotateDown()) {
+	    			setChangeR(-2.5);
+	    		}
+	    		else {
+	    			setChangeX(0.0);
+	    			setChangeY(0.0);
+	    			setChangeR(0.0);
+	    		}
     		}
     	}    			
     }
@@ -165,4 +209,13 @@ public class TankModel extends Sprite {
 	public void setHealth(double health) {
 		this.health = health;
 	}
+	/*
+	public double getTankMaxY() {
+		return tankMaxY;
+	}
+	
+	public double getTankMinY() {
+		return tankMinY;
+	}
+    */
 }

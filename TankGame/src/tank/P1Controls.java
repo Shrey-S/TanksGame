@@ -12,27 +12,20 @@ import javafx.event.EventHandler;
  *
  */
 public class P1Controls {
-    private KeyCode p1LeftKey;
-    private KeyCode p1RightKey;
-    private KeyCode p1UpKey;
-    private KeyCode p1DownKey;
-    private KeyCode fire;
-    private KeyCode p1RotateUp;
-    private KeyCode p1RotateDown;
+    private BitSet keyboard = new BitSet();
 
-    private Scene scene;  
-    private BitSet keyboard;
-    
+    private KeyCode p1LeftKey = KeyCode.A;
+    private KeyCode p1RightKey = KeyCode.D;
+    private KeyCode p1UpKey = KeyCode.W;
+    private KeyCode p1DownKey = KeyCode.S;
+    private KeyCode fire = KeyCode.F;
+    private KeyCode p1RotateUp = KeyCode.E;
+    private KeyCode p1RotateDown = KeyCode.X;
+
+    Scene scene;  
+
     public P1Controls(Scene scene) {
         this.scene = scene;
-        this.keyboard = new BitSet();
-        this.p1LeftKey = KeyCode.A;
-        this.p1RightKey = KeyCode.D;
-        this.p1UpKey = KeyCode.W;
-        this.p1DownKey = KeyCode.S;
-        this.fire = KeyCode.F;
-        this.p1RotateUp = KeyCode.E;
-        this.p1RotateDown = KeyCode.X;
     }
 
     public void addEventListeners() {
